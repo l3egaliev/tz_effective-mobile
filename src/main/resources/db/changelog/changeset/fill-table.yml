@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/changelog-master.yml
+  - changeSet:
+      id: insert table users
+      author: Rakhim
+      changes:
+        - insert:
+            tableName: users
+            schemaName: bank
+            columns:
+              - column:
+                  name: fio
+                  value: "Rakhim Nurali uulu"
+              - column:
+                  name: date_of_birth
+                  valueDate: '2005-02-25'
+              - column:
+                  name: email
+                  value: "rahimbekabdumomunov@gmail.com"
+              - column:
+                  name: phone
+                  value: "79932664647"
+  - changeSet:
+      id: insert table bank_account
+      author: Rakhim
+      changes:
+        - insert:
+            tableName: bank_account
+            schemaName: bank
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: username
+                  value: 'rakhim'
+              - column:
+                  name: password
+                  value: "test_password"
+              - column:
+                  name: sum
+                  value: 10500.34
