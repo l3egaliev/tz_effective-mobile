@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/changelog-master.yml
+  - changeSet:
+      author: Rakhim
+      id: sequence for users table
+      changes:
+        - createSequence:
+            schemaName: bank
+            sequenceName: user_id_seq
+            startValue: 1
+            incrementBy: 1
+            minValue: 1
+  - changeSet:
+      author: Rakhim
+      id: sequence for bank account table
+      changes:
+        - createSequence:
+            schemaName: bank
+            sequenceName: acc_id_seq
+            startValue: 1
+            incrementBy: 1
+            minValue: 1

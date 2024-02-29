@@ -4,11 +4,6 @@ databaseChangeLog:
       author: Rakhim
       id: users_table
       changes:
-        - createSequence:
-            sequenceName: user_id_seq
-            startValue: 1
-            incrementBy: 1
-            minValue: 1
         - createTable:
             remarks: Create users table
             schemaName: bank
@@ -17,7 +12,7 @@ databaseChangeLog:
               - column:
                   name: user_id
                   type: int
-                  defaultValueComputed: nextval('user_id_seq')
+                  defaultValueComputed: nextval('bank.user_id_seq')
                   remarks: Primary key of the users table
                   constraints:
                     primaryKey: true
@@ -47,11 +42,6 @@ databaseChangeLog:
       id: bankAccount-table
       author: Rakhim
       changes:
-        - createSequence:
-            sequenceName: acc_id_seq
-            startValue: 1
-            incrementBy: 1
-            minValue: 1
         - createTable:
             remarks: Create table bank account
             schemaName: bank
@@ -60,7 +50,7 @@ databaseChangeLog:
               - column:
                   name: acc_id
                   type: int
-                  defaultValueComputed: nextval('acc_id_seq')
+                  defaultValueComputed: nextval('bank.acc_id_seq')
                   constraints:
                     nullable: false
                     primaryKey: true
