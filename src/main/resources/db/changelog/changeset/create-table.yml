@@ -19,25 +19,9 @@ databaseChangeLog:
               - column:
                   name: fio
                   type: varchar(200)
-                  constraints:
-                    nullable: false
               - column:
                   name: date_of_birth
                   type: timestamp
-                  constraints:
-                    nullable: false
-              - column:
-                  name: email
-                  type: varchar(200)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: phone
-                  type: varchar
-                  constraints:
-                    nullable: false
-                    unique: true
   - changeSet:
       id: bankAccount-table
       author: Rakhim
@@ -73,12 +57,82 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: password
-                  type: varchar(30)
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: sum
                   type: float
+              - column:
+                  name: created_at
+                  type: timestamp
+  - changeSet:
+      author: Rakhim
+      id: create table user emails
+      changes:
+        - createTable:
+            tableName: user_emails
+            schemaName: bank
+            columns:
+              - column:
+                  name: email_id
+                  type: int
+                  defaultValueComputed: nextval('bank.email_id_seq')
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    unique: true
+                    referencedTableSchemaName: bank
+                    foreignKeyName: user_id
+                    referencedTableName: users
+                    referencedColumnNames: user_id
+                    nullable: false
+                    deleteCascade: true
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: created_at
+                  type: timestamp
+  - changeSet:
+      author: Rakhim
+      id: create table user phones
+      changes:
+        - createTable:
+            tableName: user_phones
+            schemaName: bank
+            columns:
+              - column:
+                  name: phone_id
+                  type: int
+                  defaultValueComputed: nextval('bank.phone_id_seq')
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    unique: true
+                    referencedTableSchemaName: bank
+                    foreignKeyName: user_id
+                    referencedTableName: users
+                    referencedColumnNames: user_id
+                    nullable: false
+                    deleteCascade: true
+              - column:
+                  name: phone
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique: true
               - column:
                   name: created_at
                   type: timestamp

@@ -14,12 +14,6 @@ databaseChangeLog:
               - column:
                   name: date_of_birth
                   valueDate: '2005-02-25'
-              - column:
-                  name: email
-                  value: "rahimbekabdumomunov@gmail.com"
-              - column:
-                  name: phone
-                  value: "79932664647"
   - changeSet:
       id: insert table bank_account
       author: Rakhim

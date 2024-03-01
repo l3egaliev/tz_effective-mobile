@@ -20,3 +20,23 @@ databaseChangeLog:
             startValue: 1
             incrementBy: 1
             minValue: 1
+  - changeSet:
+      author: Rakhim
+      id: sequence for users emails table
+      changes:
+        - createSequence:
+            schemaName: bank
+            sequenceName: email_id_seq
+            startValue: 1
+            incrementBy: 1
+            minValue: 1
+  - changeSet:
+      author: Rakhim
+      id: sequence for users phones table
+      changes:
+        - createSequence:
+            schemaName: bank
+            sequenceName: phone_id_seq
+            startValue: 1
+            incrementBy: 1
+            minValue: 1
