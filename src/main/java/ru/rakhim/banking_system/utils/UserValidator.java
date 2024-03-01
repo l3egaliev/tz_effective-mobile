@@ -7,6 +7,7 @@ import org.springframework.validation.Validator;
 import ru.rakhim.banking_system.model.Account;
 import ru.rakhim.banking_system.model.User;
 import ru.rakhim.banking_system.model.UserEmails;
+import ru.rakhim.banking_system.model.UserPhones;
 import ru.rakhim.banking_system.service.UserContactsService;
 import ru.rakhim.banking_system.service.UserService;
 
@@ -38,6 +39,12 @@ public class UserValidator implements Validator {
             err.rejectValue("newEmail", "", newEmail+" уже существует");
         }
 
+    }
+
+    public void validateNewPhone(String newPhone, Errors err){
+        if (contactsService.findByPhone(List.of(new UserPhones(newPhone))).isPresent()){
+            err.rejectValue("newPhone", "", newPhone+" уже существует");
+        }
     }
 
     public void validate(Account a, Errors err){

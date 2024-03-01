@@ -8,11 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.rakhim.banking_system.dto.ChangeEmailDTO;
+import ru.rakhim.banking_system.dto.ChangePhoneDTO;
 import ru.rakhim.banking_system.dto.CreateAccountResponseDto;
-import ru.rakhim.banking_system.model.Account;
-import ru.rakhim.banking_system.model.JwtAuthentication;
-import ru.rakhim.banking_system.model.User;
-import ru.rakhim.banking_system.model.UserEmails;
+import ru.rakhim.banking_system.model.*;
 import ru.rakhim.banking_system.security.UserDetailsImpl;
 import ru.rakhim.banking_system.service.UserContactsService;
 import ru.rakhim.banking_system.service.UserService;
@@ -63,8 +61,46 @@ public class UserController {
         }
     }
 
+    @PostMapping("/update/phone")
+    public ResponseEntity<Map<String, Object>> changeEmail(@RequestBody @Valid ChangePhoneDTO dto,
+                                                           BindingResult br){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        if (dto.getOldPhone() == null || dto.getOldPhone().isEmpty() &&
+                dto.getNewPhone() != null && !dto.getNewPhone().isEmpty()){
+            List<String> errors = checkNewPhone(dto, br);
+            if(!errors.isEmpty()){
+                return ResponseEntity.badRequest().body(Map.of("message", errors));
+            }
+            userService.addPhone(dto.getNewPhone(), userDetails.getUsername());
+            return ResponseEntity.ok(Map.of("message", "Новый телефон успешно добавлен"));
+        } else if(dto.getNewPhone() == null || dto.getNewPhone().isEmpty()){
+            return ResponseEntity.badRequest().body(Map.of("message", "newPhone не может быть пустым"));
+        }else{
+            User user = new User();
+            user.getPhones().add(new UserPhones(dto.getOldPhone()));
+            if (contactsService.findByPhone(user.getPhones()).isEmpty()){
+                return ResponseEntity.badRequest().body(Map.of("message", dto.getOldPhone()+" не существует"));
+            }
+            List<String> errors = checkNewPhone(dto, br);
+            if(!errors.isEmpty()){
+                return ResponseEntity.badRequest().body(Map.of("message", errors));
+            }
+            userService.changePhone(dto.getOldPhone(), dto.getNewPhone());
+            return ResponseEntity.ok(Map.of("message", "телефон "+dto.getOldPhone()+" успешно изменен"));
+        }
+    }
+
     private List<String> checkNewEmail(ChangeEmailDTO dto, BindingResult br){
         userValidator.validateNewEmail(dto.getNewEmail(), br);
+        if (br.hasErrors()){
+            return ErrorSender.returnErrorsToClient(br);
+        }
+        return Collections.emptyList();
+    }
+
+    private List<String> checkNewPhone(ChangePhoneDTO dto, BindingResult br){
+        userValidator.validateNewPhone(dto.getNewPhone(), br);
         if (br.hasErrors()){
             return ErrorSender.returnErrorsToClient(br);
         }
