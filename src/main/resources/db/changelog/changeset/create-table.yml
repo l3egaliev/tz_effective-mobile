@@ -85,7 +85,7 @@ databaseChangeLog:
                   name: user_id
                   type: int
                   constraints:
-                    unique: true
+                    unique: false
                     referencedTableSchemaName: bank
                     foreignKeyName: user_id
                     referencedTableName: users
@@ -120,7 +120,7 @@ databaseChangeLog:
                   name: user_id
                   type: int
                   constraints:
-                    unique: true
+                    unique: false
                     referencedTableSchemaName: bank
                     foreignKeyName: user_id
                     referencedTableName: users

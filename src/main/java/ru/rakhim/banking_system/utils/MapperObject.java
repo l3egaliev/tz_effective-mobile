@@ -3,13 +3,15 @@ package ru.rakhim.banking_system.utils;
 import ru.rakhim.banking_system.dto.CreateAccountResponseDto;
 import ru.rakhim.banking_system.model.Account;
 import ru.rakhim.banking_system.model.User;
+import ru.rakhim.banking_system.model.UserEmails;
+import ru.rakhim.banking_system.model.UserPhones;
 
 public class MapperObject {
 
     public static User mapToUser(CreateAccountResponseDto dto){
         User user = new User();
-        user.setEmail(dto.getEmail());
-        user.setPhone(dto.getPhone());
+        user.getEmails().add(new UserEmails(dto.getEmail()));
+        user.getPhones().add(new UserPhones(dto.getPhone()));
         return user;
     }
 
