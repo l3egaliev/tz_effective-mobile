@@ -7,9 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.rakhim.banking_system.dto.ChangeEmailDTO;
-import ru.rakhim.banking_system.dto.ChangePhoneDTO;
-import ru.rakhim.banking_system.dto.CreateAccountResponseDto;
+import ru.rakhim.banking_system.dto.*;
 import ru.rakhim.banking_system.model.*;
 import ru.rakhim.banking_system.security.UserDetailsImpl;
 import ru.rakhim.banking_system.service.UserContactsService;
@@ -42,7 +40,7 @@ public class UserController {
             if(!errors.isEmpty()){
                 return ResponseEntity.badRequest().body(Map.of("message", errors));
             }
-            userService.addEmail(dto.getNewEmail(), userDetails.getUsername());
+            contactsService.addEmail(dto.getNewEmail(), userDetails.getUsername());
             return ResponseEntity.ok(Map.of("message", "Новый email успешно добавлен"));
         } else if(dto.getNewEmail() == null || dto.getNewEmail().isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "newEmail не может быть пустым"));
@@ -56,7 +54,7 @@ public class UserController {
             if(!errors.isEmpty()){
                 return ResponseEntity.badRequest().body(Map.of("message", errors));
             }
-            userService.changeEmail(dto.getOldEmail(), dto.getNewEmail());
+            contactsService.changeEmail(dto.getOldEmail(), dto.getNewEmail());
             return ResponseEntity.ok(Map.of("message", "email "+dto.getOldEmail()+" успешно изменен"));
         }
     }
@@ -72,7 +70,7 @@ public class UserController {
             if(!errors.isEmpty()){
                 return ResponseEntity.badRequest().body(Map.of("message", errors));
             }
-            userService.addPhone(dto.getNewPhone(), userDetails.getUsername());
+            contactsService.addPhone(dto.getNewPhone(), userDetails.getUsername());
             return ResponseEntity.ok(Map.of("message", "Новый телефон успешно добавлен"));
         } else if(dto.getNewPhone() == null || dto.getNewPhone().isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "newPhone не может быть пустым"));
@@ -86,7 +84,7 @@ public class UserController {
             if(!errors.isEmpty()){
                 return ResponseEntity.badRequest().body(Map.of("message", errors));
             }
-            userService.changePhone(dto.getOldPhone(), dto.getNewPhone());
+            contactsService.changePhone(dto.getOldPhone(), dto.getNewPhone());
             return ResponseEntity.ok(Map.of("message", "телефон "+dto.getOldPhone()+" успешно изменен"));
         }
     }
@@ -105,5 +103,33 @@ public class UserController {
             return ErrorSender.returnErrorsToClient(br);
         }
         return Collections.emptyList();
+    }
+
+    @DeleteMapping("/delete/email")
+    public ResponseEntity<Map<String, String>> deleteEmail(@RequestBody DeleteEmailDTO dto){
+        if (dto.getEmail()==null || dto.getEmail().isEmpty()){
+            return ResponseEntity.badRequest().body(Map.of("message", "email не должен быть пустым!"));
+        }else if(contactsService.findByEmail(List.of(new UserEmails(dto.getEmail()))).isEmpty()){
+            return ResponseEntity.badRequest().body(Map.of("message", dto.getEmail()+" не существует"));
+        } else if (contactsService.isLastEmail()){
+            return ResponseEntity.badRequest().body(Map.of("message", "Последний email нельзя удалить"));
+        }else{
+            contactsService.deleteEmail(dto.getEmail());
+        }
+        return ResponseEntity.ok(Map.of("message", dto.getEmail()+" успешно удален!"));
+    }
+
+    @DeleteMapping("/delete/phone")
+    public ResponseEntity<Map<String, String>> deletePhone(@RequestBody DeletePhoneDTO dto){
+        if (dto.getPhone()==null || dto.getPhone().isEmpty()){
+            return ResponseEntity.badRequest().body(Map.of("message", "phone не должен быть пустым!"));
+        }else if(contactsService.findByPhone(List.of(new UserPhones(dto.getPhone()))).isEmpty()){
+            return ResponseEntity.badRequest().body(Map.of("message", dto.getPhone()+" не существует"));
+        } else if (contactsService.isLastPhone()){
+            return ResponseEntity.badRequest().body(Map.of("message", "Последний phone нельзя удалить"));
+        }else{
+            contactsService.deletePhone(dto.getPhone());
+        }
+        return ResponseEntity.ok(Map.of("message", dto.getPhone()+" успешно удален!"));
     }
 }

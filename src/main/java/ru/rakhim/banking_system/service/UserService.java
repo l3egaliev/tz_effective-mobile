@@ -48,42 +48,4 @@ public class UserService {
         userRepository.save(user);
         accountRepository.save(account);
     }
-
-    @Transactional
-    public void addEmail(String newEmail, String username){
-        Account account = accountRepository.findByUsername(username).get();
-        account.getUser().getEmails().add(new UserEmails(newEmail));
-        UserEmails email = new UserEmails(newEmail);
-        email.setUser(account.getUser());
-        email.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        accountRepository.save(account);
-        emailsRepository.save(email);
-    }
-
-    @Transactional
-    public void changeEmail(String old, String newEmail){
-        UserEmails email = emailsRepository.findByEmail(old).get();
-        email.setEmail(newEmail);
-        email.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        emailsRepository.save(email);
-    }
-
-    @Transactional
-    public void addPhone(String newPhone, String username){
-        Account account = accountRepository.findByUsername(username).get();
-        account.getUser().getPhones().add(new UserPhones(newPhone));
-        UserPhones phone = new UserPhones(newPhone);
-        phone.setUser(account.getUser());
-        phone.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        accountRepository.save(account);
-        phonesRepository.save(phone);
-    }
-
-    @Transactional
-    public void changePhone(String oldPhone, String newPhone) {
-        UserPhones phones = phonesRepository.findByPhone(oldPhone).get();
-        phones.setPhone(newPhone);
-        phones.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        phonesRepository.save(phones);
-    }
 }
