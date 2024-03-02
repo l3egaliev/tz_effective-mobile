@@ -11,12 +11,9 @@ import ru.rakhim.banking_system.dto.*;
 import ru.rakhim.banking_system.model.*;
 import ru.rakhim.banking_system.security.UserDetailsImpl;
 import ru.rakhim.banking_system.service.UserContactsService;
-import ru.rakhim.banking_system.service.UserService;
 import ru.rakhim.banking_system.utils.ErrorSender;
-import ru.rakhim.banking_system.utils.MapperObject;
 import ru.rakhim.banking_system.utils.UserValidator;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserController {
-    private final UserService userService;
+public class UserContactController {
     private final UserValidator userValidator;
     private final UserContactsService contactsService;
 
@@ -122,11 +118,11 @@ public class UserController {
     @DeleteMapping("/delete/phone")
     public ResponseEntity<Map<String, String>> deletePhone(@RequestBody DeletePhoneDTO dto){
         if (dto.getPhone()==null || dto.getPhone().isEmpty()){
-            return ResponseEntity.badRequest().body(Map.of("message", "phone не должен быть пустым!"));
+            return ResponseEntity.badRequest().body(Map.of("message", "Телефон не должен быть пустым!"));
         }else if(contactsService.findByPhone(List.of(new UserPhones(dto.getPhone()))).isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", dto.getPhone()+" не существует"));
         } else if (contactsService.isLastPhone()){
-            return ResponseEntity.badRequest().body(Map.of("message", "Последний phone нельзя удалить"));
+            return ResponseEntity.badRequest().body(Map.of("message", "Последний телефон нельзя удалить"));
         }else{
             contactsService.deletePhone(dto.getPhone());
         }

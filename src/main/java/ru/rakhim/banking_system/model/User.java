@@ -21,7 +21,7 @@ public class User {
     @Column(name = "fio")
     private String fio;
     @Column(name = "date_of_birth")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Timestamp dateOfBirth;
     @OneToOne(mappedBy = "user")
     private Account bankAccount;

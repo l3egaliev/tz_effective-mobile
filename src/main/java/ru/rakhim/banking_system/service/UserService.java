@@ -28,8 +28,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
-    private final UserEmailsRepository emailsRepository;
-    private final UserPhonesRepository phonesRepository;
+    private final UserContactsService contactsService;
 
     public Optional<User> findByUsername(String username){
         Optional<Account> acc = accountRepository.findByUsername(username);
@@ -47,5 +46,6 @@ public class UserService {
         account.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         userRepository.save(user);
         accountRepository.save(account);
+        contactsService.saveContacts(user);
     }
 }

@@ -97,4 +97,17 @@ public class UserContactsService {
         UserPhones phoneToDelete = phonesRepository.findByPhone(phone).get();
         phonesRepository.delete(phoneToDelete);
     }
+
+    @Transactional
+    public void saveContacts(User user){
+        UserPhones phone = user.getPhones().get(0);
+        UserEmails email = user.getEmails().get(0);
+
+        phone.setUser(user);
+        phone.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        email.setUser(user);
+        email.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        emailsRepository.save(email);
+        phonesRepository.save(phone);
+    }
 }
