@@ -1,5 +1,7 @@
 package ru.rakhim.banking_system.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ public class UserContactController {
     private final UserContactsService contactsService;
 
     @PostMapping("/update/email")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, Object>> changeEmail(@RequestBody @Valid ChangeEmailDTO dto,
                                                            BindingResult br){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -56,6 +59,7 @@ public class UserContactController {
     }
 
     @PostMapping("/update/phone")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, Object>> changeEmail(@RequestBody @Valid ChangePhoneDTO dto,
                                                            BindingResult br){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -102,6 +106,7 @@ public class UserContactController {
     }
 
     @DeleteMapping("/delete/email")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, String>> deleteEmail(@RequestBody DeleteEmailDTO dto){
         if (dto.getEmail()==null || dto.getEmail().isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "email не должен быть пустым!"));
@@ -116,6 +121,7 @@ public class UserContactController {
     }
 
     @DeleteMapping("/delete/phone")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, String>> deletePhone(@RequestBody DeletePhoneDTO dto){
         if (dto.getPhone()==null || dto.getPhone().isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "Телефон не должен быть пустым!"));

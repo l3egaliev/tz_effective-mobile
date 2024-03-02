@@ -20,6 +20,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <jwt.version>0.11.5</jwt.version>
         <java-jwt.version>4.3.0</java-jwt.version>
+        <springdoc.version>2.3.0</springdoc.version>
     </properties>
     <dependencies>
         <dependency>
@@ -90,6 +91,11 @@
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>${java-jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
     </dependencies>
 

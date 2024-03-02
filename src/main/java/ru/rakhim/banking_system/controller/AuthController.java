@@ -1,5 +1,6 @@
 package ru.rakhim.banking_system.controller;
 
+import io.swagger.v3.oas.annotations.headers.Header;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> createBankAccount(@RequestBody @Valid CreateAccountResponseDto dto,
+    public ResponseEntity<Map<String, Object>> register(@RequestBody @Valid CreateAccountResponseDto dto,
                                                                  BindingResult b){
         Account account = MapperObject.mapToAccount(dto);
         User user = MapperObject.mapToUser(dto);
@@ -51,18 +52,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody AuthenticationDTO authRequest){
         final JwtResponse token = service.login(authRequest);
-        return ResponseEntity.ok(token);
-    }
-
-    @PostMapping("token")
-    public ResponseEntity<JwtResponse> getNewAccessToken(@RequestBody RefreshJwtRequest request) {
-        final JwtResponse token = service.getAccessToken(request.getRefreshToken());
-        return ResponseEntity.ok(token);
-    }
-
-    @PostMapping("refresh")
-    public ResponseEntity<JwtResponse> getNewRefreshToken(@RequestBody RefreshJwtRequest request) {
-        final JwtResponse token = service.refresh(request.getRefreshToken());
         return ResponseEntity.ok(token);
     }
 }

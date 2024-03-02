@@ -1,11 +1,17 @@
 package ru.rakhim.banking_system.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.config.annotation.web.headers.HeadersSecurityMarker;
+import org.springframework.web.bind.annotation.*;
+import ru.rakhim.banking_system.filter.JwtFilter;
+import ru.rakhim.banking_system.security.JwtProvider;
 import ru.rakhim.banking_system.service.UserService;
 
 import java.util.Map;
@@ -17,6 +23,7 @@ public class SearchUserController {
     private final UserService userService;
 
     @GetMapping()
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, Object>> findUser(
             @RequestParam(name = "date", required = false) String dateOfBirth,
             @RequestParam(name = "phone", required = false) String phone,
