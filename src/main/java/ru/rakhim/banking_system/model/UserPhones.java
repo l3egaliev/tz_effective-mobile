@@ -28,4 +28,9 @@ public class UserPhones {
     public UserPhones(String phone){
         this.phone = phone;
     }
+
+    @Override
+    public String toString(){
+        return phone;
+    }
 }

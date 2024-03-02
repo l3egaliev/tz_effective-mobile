@@ -28,4 +28,9 @@ public class UserEmails {
     public UserEmails(String email){
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return email;
+    }
 }
