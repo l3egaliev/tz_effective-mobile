@@ -100,7 +100,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test-autoconfigure</artifactId>
-            <version>3.2.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.loggable</groupId>
+            <artifactId>loggable-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
