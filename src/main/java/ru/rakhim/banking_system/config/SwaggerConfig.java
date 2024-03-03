@@ -18,27 +18,4 @@ public class SwaggerConfig {
         return new OpenAPI().components(new Components().addSecuritySchemes("bearer-key",
                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
     }
-
-//    @Bean
-//    public GroupedOpenApi publicApi() {
-//        return GroupedOpenApi.builder()
-//                .group("add-user-id-header")
-//                .addOperationCustomizer((operation, handlerMethod) -> {
-//                    String path = handlerMethod.getMethod().getName();
-//
-//                    // Проверяем путь операции и исключаем методы, которые соответствуют пути "/register"
-//                    if (!path.equals("register") && !path.equals("login")) {
-//                        operation.addParametersItem(
-//                                new HeaderParameter()
-//                                        .name("Authorization")
-//                                        .description("Access Token")
-//                                        .required(true)
-//                                        .schema(new StringSchema().pattern("^Bearer\\s.+"))// Устанавливаем шаблон для токена
-//                        );
-//                    }
-//                    return operation;
-//                })
-//                .build();
-//    }
-
 }
