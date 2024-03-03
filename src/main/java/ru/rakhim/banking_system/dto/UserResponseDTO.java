@@ -12,7 +12,7 @@ public class UserResponseDTO {
     private String fio;
     private Timestamp dateOfBirth;
     private String username;
-    private Double sum;
+    private Double balance;
     private List<String> emails;
     private List<String> phones;
 }

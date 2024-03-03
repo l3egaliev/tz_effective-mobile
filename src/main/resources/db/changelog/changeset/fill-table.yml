@@ -10,6 +10,16 @@ databaseChangeLog:
             columns:
               - column:
                   name: fio
+                  value: "Jon due"
+              - column:
+                  name: date_of_birth
+                  valueDate: '2000-02-25'
+        - insert:
+            tableName: users
+            schemaName: bank
+            columns:
+              - column:
+                  name: fio
                   value: "Rakhim Nurali uulu"
               - column:
                   name: date_of_birth
@@ -32,5 +42,27 @@ databaseChangeLog:
                   name: password
                   value: "test_password"
               - column:
-                  name: sum
-                  value: 10500.34
+                  name: initial_deposit
+                  valueNumeric: 10500.34
+              - column:
+                  name: balance
+                  valueNumeric: 10500.34
+        - insert:
+            tableName: bank_account
+            schemaName: bank
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: username
+                  value: 'jon'
+              - column:
+                  name: password
+                  value: "jonpassword"
+              - column:
+                  name: initial_deposit
+                  valueNumeric: 2000.34
+              - column:
+                  name: balance
+                  valueNumeric: 2000.34

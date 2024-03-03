@@ -21,9 +21,11 @@ public class Account {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "sum")
+    @Column(name = "balance")
     @Min(0)
-    private Double sum;
+    private Double balance;
+    @Column(name = "initial_deposit")
+    private Double initialDeposit;
     @Column(name = "created_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt;

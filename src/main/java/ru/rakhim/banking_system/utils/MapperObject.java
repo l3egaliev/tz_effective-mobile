@@ -21,7 +21,8 @@ public class MapperObject {
 
     public static Account mapToAccount(CreateAccountResponseDto dto){
         Account account = new Account();
-        account.setSum(dto.getSum());
+        account.setInitialDeposit(dto.getInitialDeposit());
+        account.setBalance(dto.getInitialDeposit());
         account.setUsername(dto.getUsername());
         account.setPassword(dto.getPassword());
         return account;

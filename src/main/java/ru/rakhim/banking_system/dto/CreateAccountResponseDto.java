@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 public class CreateAccountResponseDto {
     @NotNull
     @NotEmpty
-    @Size(min = 8, max = 100, message = "ФИО от 10 до 100 символов")
+    @Size(min = 4, max = 100, message = "ФИО от 4 до 100 символов")
     private String fio;
     @NotNull(message = "Формат даты - ГГГГ-мм-дд")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -27,7 +27,7 @@ public class CreateAccountResponseDto {
     private String password;
     @NotNull(message = "На счета изначально должно быть какая-то сумма")
     @Min(1)
-    private double sum;
+    private double initialDeposit;
     @NotNull
     @Size(min = 10, max = 15, message = "Неверный формат номера")
     @Pattern(regexp = "[0-9]+", message = "Только цифры")

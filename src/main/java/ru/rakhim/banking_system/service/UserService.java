@@ -3,6 +3,7 @@ package ru.rakhim.banking_system.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.rakhim.banking_system.dao.UserDAO;
@@ -48,7 +49,7 @@ public class UserService {
                    .dateOfBirth(u.getDateOfBirth())
                    .emails(List.of(u.getEmails().toString()))
                    .phones(List.of(u.getPhones().toString()))
-                   .sum(u.getBankAccount().getSum())
+                   .balance(u.getBankAccount().getBalance())
                    .username(u.getBankAccount().getUsername()).build());
        });
        return res;
@@ -59,7 +60,7 @@ public class UserService {
         if(userPhones != null){
             return Optional.of(UserResponseDTO.builder()
                     .username(userPhones.getUser().getBankAccount().getUsername())
-                    .sum(userPhones.getUser().getBankAccount().getSum())
+                    .balance(userPhones.getUser().getBankAccount().getBalance())
                     .dateOfBirth(userPhones.getUser().getDateOfBirth())
                     .fio(userPhones.getUser().getFio())
                     .phones(List.of(userPhones.toString()))
@@ -82,7 +83,7 @@ public class UserService {
         if (email != null){
            return Optional.of(UserResponseDTO.builder()
                     .username(email.getUser().getBankAccount().getUsername())
-                    .sum(email.getUser().getBankAccount().getSum())
+                    .balance(email.getUser().getBankAccount().getBalance())
                     .dateOfBirth(email.getUser().getDateOfBirth())
                     .fio(email.getUser().getFio())
                     .phones(List.of(email.getUser().getPhones().toString()))
@@ -110,13 +111,26 @@ public class UserService {
         contactsService.saveContacts(user);
     }
 
-    private boolean doResponse(List<UserResponseDTO> response, User u){
-        return response.add(UserResponseDTO.builder()
+    private void doResponse(List<UserResponseDTO> response, User u){
+        response.add(UserResponseDTO.builder()
                 .fio(u.getFio())
                 .emails(List.of(u.getEmails().toString()))
                 .phones(List.of(u.getPhones().toString()))
                 .dateOfBirth(u.getDateOfBirth())
-                .sum(u.getBankAccount().getSum())
+                .balance(u.getBankAccount().getBalance())
                 .username(u.getBankAccount().getUsername()).build());
+    }
+
+    @Transactional
+    @Scheduled(fixedRate = 60000) // Запуск каждую минуту
+    public void increaseBalances() {
+        List<Account> clients = accountRepository.findAll();
+        for (Account client : clients) {
+            double newBalance = client.getBalance() * 1.05;
+            if(client.getInitialDeposit() != null) {
+                client.setBalance(Math.min(newBalance, client.getInitialDeposit() * 2.07));
+            }
+            accountRepository.save(client);
+        }
     }
 }

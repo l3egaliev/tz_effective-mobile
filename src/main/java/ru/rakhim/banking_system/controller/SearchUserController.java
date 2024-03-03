@@ -29,8 +29,7 @@ public class SearchUserController {
     public ResponseEntity<Map<String, Object>> findUser(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "date", required = false) @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}",
-                    message = "Формат даты - ГГГГ-ММ-ДД(1990-02-20)") String dateOfBirth,
+            @RequestParam(name = "date", required = false) @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}") String dateOfBirth,
             @RequestParam(name = "phone", required = false) String phone,
             @RequestParam(name = "fio", required = false) String fio,
             @RequestParam(name = "email", required = false) String email){
