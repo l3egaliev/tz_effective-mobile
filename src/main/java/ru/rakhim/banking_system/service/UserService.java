@@ -1,12 +1,15 @@
 package ru.rakhim.banking_system.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.rakhim.banking_system.dao.UserDAO;
 import ru.rakhim.banking_system.dto.UserResponseDTO;
 import ru.rakhim.banking_system.model.Account;
 import ru.rakhim.banking_system.model.User;
+import ru.rakhim.banking_system.model.UserEmails;
 import ru.rakhim.banking_system.model.UserPhones;
 import ru.rakhim.banking_system.repository.AccountRepository;
 import ru.rakhim.banking_system.repository.UserRepository;
@@ -51,31 +54,48 @@ public class UserService {
        return res;
     }
 
-    public UserResponseDTO findUserByPhone(String p){
+    public Optional<UserResponseDTO> findUserByPhone(String p){
         UserPhones userPhones = contactsService.findByPhone(p);
         if(userPhones != null){
-            return UserResponseDTO.builder()
+            return Optional.of(UserResponseDTO.builder()
                     .username(userPhones.getUser().getBankAccount().getUsername())
                     .sum(userPhones.getUser().getBankAccount().getSum())
                     .dateOfBirth(userPhones.getUser().getDateOfBirth())
                     .fio(userPhones.getUser().getFio())
                     .phones(List.of(userPhones.toString()))
-                    .emails(List.of(userPhones.getUser().getEmails().toString())).build();
+                    .emails(List.of(userPhones.getUser().getEmails().toString())).build());
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<UserResponseDTO> findByFio(String f){
         List<UserResponseDTO> response = new ArrayList<>();
         List<User> users = userRepository.findAllByFioStartingWithIgnoreCase(f);
         users.forEach(u -> {
-            response.add(UserResponseDTO.builder()
-                    .fio(u.getFio())
-                    .emails(List.of(u.getEmails().toString()))
-                    .phones(List.of(u.getPhones().toString()))
-                    .dateOfBirth(u.getDateOfBirth())
-                    .sum(u.getBankAccount().getSum())
-                    .username(u.getBankAccount().getUsername()).build());
+            doResponse(response, u);
+        });
+        return response;
+    }
+
+    public Optional<UserResponseDTO> findByEmail(String e){
+        UserEmails email = contactsService.findByEmail(e);
+        if (email != null){
+           return Optional.of(UserResponseDTO.builder()
+                    .username(email.getUser().getBankAccount().getUsername())
+                    .sum(email.getUser().getBankAccount().getSum())
+                    .dateOfBirth(email.getUser().getDateOfBirth())
+                    .fio(email.getUser().getFio())
+                    .phones(List.of(email.getUser().getPhones().toString()))
+                    .emails(List.of(email.getUser().getEmails().toString())).build());
+        }
+        return Optional.empty();
+    }
+
+    public List<UserResponseDTO> findAllByPagination(int page, int pageSize){
+        List<User> users = userRepository.findAll(PageRequest.of(page, pageSize, Sort.by("fio"))).getContent();
+        List<UserResponseDTO> response = new ArrayList<>();
+        users.forEach(u -> {
+            doResponse(response, u);
         });
         return response;
     }
@@ -88,5 +108,15 @@ public class UserService {
         userRepository.save(user);
         accountRepository.save(account);
         contactsService.saveContacts(user);
+    }
+
+    private boolean doResponse(List<UserResponseDTO> response, User u){
+        return response.add(UserResponseDTO.builder()
+                .fio(u.getFio())
+                .emails(List.of(u.getEmails().toString()))
+                .phones(List.of(u.getPhones().toString()))
+                .dateOfBirth(u.getDateOfBirth())
+                .sum(u.getBankAccount().getSum())
+                .username(u.getBankAccount().getUsername()).build());
     }
 }

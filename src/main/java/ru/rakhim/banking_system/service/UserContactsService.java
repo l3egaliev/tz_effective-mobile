@@ -31,6 +31,10 @@ public class UserContactsService {
                 .flatMap(emailsRepository::findByEmail);
     }
 
+    public UserEmails findByEmail(String email){
+        return emailsRepository.findByEmail(email).orElse(null);
+    }
+
     public Optional<UserPhones> findByPhone(List<UserPhones> phones){
         return phones.stream()
                 .map(UserPhones::getPhone)
