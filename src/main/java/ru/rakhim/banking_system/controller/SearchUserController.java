@@ -34,12 +34,18 @@ public class SearchUserController {
             return findByDate(dateOfBirth);
         }else if(phone != null && !phone.isEmpty()){
             return findByPhone(phone);
+        }else if(fio != null && !fio.isEmpty()){
+            return findByFio(fio);
         }
         return ResponseEntity.badRequest().body(Map.of());
     }
 
     private ResponseEntity<Map<String, Object>> findByDate(String date){
         return ResponseEntity.ok(Map.of("response", userService.findByDateOfBirth(date)));
+    }
+
+    private  ResponseEntity<Map<String, Object>> findByFio(String fio){
+        return ResponseEntity.ok(Map.of("message", userService.findByFio(fio)));
     }
 
     private ResponseEntity<Map<String, Object>> findByPhone(String phone){

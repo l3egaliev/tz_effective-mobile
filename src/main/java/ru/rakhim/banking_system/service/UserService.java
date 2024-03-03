@@ -65,6 +65,21 @@ public class UserService {
         return null;
     }
 
+    public List<UserResponseDTO> findByFio(String f){
+        List<UserResponseDTO> response = new ArrayList<>();
+        List<User> users = userRepository.findAllByFioStartingWithIgnoreCase(f);
+        users.forEach(u -> {
+            response.add(UserResponseDTO.builder()
+                    .fio(u.getFio())
+                    .emails(List.of(u.getEmails().toString()))
+                    .phones(List.of(u.getPhones().toString()))
+                    .dateOfBirth(u.getDateOfBirth())
+                    .sum(u.getBankAccount().getSum())
+                    .username(u.getBankAccount().getUsername()).build());
+        });
+        return response;
+    }
+
     @Transactional
     public void save(User user){
         Account account = user.getBankAccount();
