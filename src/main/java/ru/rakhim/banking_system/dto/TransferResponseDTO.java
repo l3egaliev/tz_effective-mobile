@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class TransferResponseDTO {
-    private String status;
+    private String message;
 }

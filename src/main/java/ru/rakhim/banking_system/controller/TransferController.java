@@ -25,7 +25,7 @@ public class TransferController {
     private final TransferService transferService;
 
     @PutMapping
-    @Operation(description = "Можно переводить деньги через username/телефон/email",
+    @Operation(description = "Можно переводить деньги через username",
     security = {@SecurityRequirement(name = "bearer-key")})
     public ResponseEntity<Map<String, Object>> sendMoney(@RequestBody TransferDTO dto){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
