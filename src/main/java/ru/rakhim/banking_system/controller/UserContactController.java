@@ -2,6 +2,7 @@ package ru.rakhim.banking_system.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Tag(name = "Контроллер для обновления телефона/почты")
 public class UserContactController {
     private final UserValidator userValidator;
     private final UserContactsService contactsService;
 
     @PostMapping("/update/email")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(description = "Обновить/добавить email", security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, Object>> changeEmail(@RequestBody @Valid ChangeEmailDTO dto,
                                                            BindingResult br){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -59,7 +61,7 @@ public class UserContactController {
     }
 
     @PostMapping("/update/phone")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(description = "Обновить/добавить телефон",security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, Object>> changeEmail(@RequestBody @Valid ChangePhoneDTO dto,
                                                            BindingResult br){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -106,7 +108,7 @@ public class UserContactController {
     }
 
     @DeleteMapping("/delete/email")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(description = "Удалить email",security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, String>> deleteEmail(@RequestBody DeleteEmailDTO dto){
         if (dto.getEmail()==null || dto.getEmail().isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "email не должен быть пустым!"));
@@ -121,7 +123,7 @@ public class UserContactController {
     }
 
     @DeleteMapping("/delete/phone")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(description = "Удалить телефон",security = { @SecurityRequirement(name = "bearer-key") })
     public ResponseEntity<Map<String, String>> deletePhone(@RequestBody DeletePhoneDTO dto){
         if (dto.getPhone()==null || dto.getPhone().isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "Телефон не должен быть пустым!"));

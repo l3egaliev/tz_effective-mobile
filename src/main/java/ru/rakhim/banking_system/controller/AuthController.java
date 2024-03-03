@@ -1,6 +1,8 @@
 package ru.rakhim.banking_system.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name="Контроллер для регистрации/авторизации")
 public class AuthController {
     private final UserValidator validator;
     private final AuthService service;
@@ -34,6 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(description = "Регистрироваться")
     public ResponseEntity<Map<String, Object>> register(@RequestBody @Valid CreateAccountResponseDto dto,
                                                                  BindingResult b){
         Account account = MapperObject.mapToAccount(dto);
@@ -50,6 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(description = "Авторизоваться")
     public ResponseEntity<JwtResponse> login(@RequestBody AuthenticationDTO authRequest){
         final JwtResponse token = service.login(authRequest);
         return ResponseEntity.ok(token);

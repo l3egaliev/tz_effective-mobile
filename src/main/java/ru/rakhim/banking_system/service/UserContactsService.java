@@ -38,6 +38,10 @@ public class UserContactsService {
                 .flatMap(phonesRepository::findByPhone);
     }
 
+    public UserPhones findByPhone(String phone){
+        return phonesRepository.findByPhone(phone).orElse(null);
+    }
+
     @Transactional
     public void addEmail(String newEmail, String username){
         Account account = accountRepository.findByUsername(username).get();

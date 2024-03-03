@@ -7,6 +7,7 @@ import ru.rakhim.banking_system.dao.UserDAO;
 import ru.rakhim.banking_system.dto.UserResponseDTO;
 import ru.rakhim.banking_system.model.Account;
 import ru.rakhim.banking_system.model.User;
+import ru.rakhim.banking_system.model.UserPhones;
 import ru.rakhim.banking_system.repository.AccountRepository;
 import ru.rakhim.banking_system.repository.UserRepository;
 
@@ -48,6 +49,20 @@ public class UserService {
                    .username(u.getBankAccount().getUsername()).build());
        });
        return res;
+    }
+
+    public UserResponseDTO findUserByPhone(String p){
+        UserPhones userPhones = contactsService.findByPhone(p);
+        if(userPhones != null){
+            return UserResponseDTO.builder()
+                    .username(userPhones.getUser().getBankAccount().getUsername())
+                    .sum(userPhones.getUser().getBankAccount().getSum())
+                    .dateOfBirth(userPhones.getUser().getDateOfBirth())
+                    .fio(userPhones.getUser().getFio())
+                    .phones(List.of(userPhones.toString()))
+                    .emails(List.of(userPhones.getUser().getEmails().toString())).build();
+        }
+        return null;
     }
 
     @Transactional
